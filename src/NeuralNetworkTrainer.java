@@ -4,28 +4,32 @@ import java.util.List;
 
 public class NeuralNetworkTrainer {
 
-    Long seedForRandomNumbers = 1L;
-    Double learningRate = 1.0;
-    Integer numberOfEpochs = 50;
-    Integer numberOfHiddenLayerNeurons = 2;
+    Long seedForRandomNumbers;
+    Double learningRate;
+    Integer numberOfEpochs;
+    Integer numberOfHiddenLayerNeurons;
     NeuralNetwork neuralNetwork;
 
-    public void train(List<TrainingData> trainingData) {
-        neuralNetwork = initializeNeuralNetwork(trainingData, numberOfHiddenLayerNeurons);
+    public NeuralNetworkTrainer(Long seedForRandomNumbers,
+                                Double learningRate,
+                                Integer numberOfEpochs,
+                                Integer numberOfHiddenLayerNeurons) {
+        this.seedForRandomNumbers = seedForRandomNumbers;
+        this.learningRate = learningRate;
+        this.numberOfEpochs = numberOfEpochs;
+        this.numberOfHiddenLayerNeurons = numberOfHiddenLayerNeurons;
     }
 
-    private NeuralNetwork initializeNeuralNetwork(List<TrainingData> trainingData, Integer numberOfHiddenLayerNeurons) {
+    public void initializeNeuralNetwork(List<TrainingData> trainingData) {
         // The number of neurons in entrance layer is the size of the input
         Integer numberOfEntranceNeurons = trainingData.get(0).inputs.size();
         // The number of neurons in entrance layer is the quantity of expected results possibles
         Integer numberOfExitNeurons = getQuantityOfDistinctExpectedResults(trainingData);
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(numberOfEntranceNeurons, numberOfHiddenLayerNeurons, numberOfExitNeurons);
+        neuralNetwork = new NeuralNetwork(numberOfEntranceNeurons, numberOfHiddenLayerNeurons, numberOfExitNeurons);
 
         // Initialize weights, including bias, with random numbers between 0 and 1
         neuralNetwork.initializeWeights(this.seedForRandomNumbers);
-
-        return neuralNetwork;
     }
 
     private Integer getQuantityOfDistinctExpectedResults(List<TrainingData> trainingData) {
