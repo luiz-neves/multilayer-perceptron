@@ -9,6 +9,7 @@ public class NeuralNetworkTrainer {
     Integer numberOfEpochs;
     Integer numberOfHiddenLayerNeurons;
     NeuralNetwork neuralNetwork;
+    List<TrainingData> trainingData;
 
     public NeuralNetworkTrainer(Long seedForRandomNumbers,
                                 Double learningRate,
@@ -21,6 +22,8 @@ public class NeuralNetworkTrainer {
     }
 
     public void initializeNeuralNetwork(List<TrainingData> trainingData) {
+        this.trainingData = trainingData;
+
         // The number of neurons in entrance layer is the size of the input
         Integer numberOfEntranceNeurons = trainingData.get(0).inputs.size();
         // The number of neurons in entrance layer is the quantity of expected results possibles
@@ -40,5 +43,17 @@ public class NeuralNetworkTrainer {
 
         HashSet<String> distinctExpectedResults = new HashSet<>(expectedResults);
         return distinctExpectedResults.size();
+    }
+
+    public void train() {
+        for (int i = 0; i < numberOfEpochs; i++) {
+            executeEpoch();
+        }
+    }
+
+    private void executeEpoch() {
+        for (TrainingData data : trainingData) {
+            neuralNetwork.feedforward(data.inputs);
+        }
     }
 }

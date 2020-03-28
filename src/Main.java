@@ -11,5 +11,23 @@ public class Main {
 
         DataExporter.exportInitialParameters(trainer);
         DataExporter.exportInitialWeights(trainer.neuralNetwork);
+
+        trainer.train();
+
+        NeuralNetwork neuralNetwork = trainer.neuralNetwork;
+        System.out.println("Entrance layer");
+        for (int i = 0; i < neuralNetwork.numberOfEntranceNeurons; i++) {
+            System.out.println(i + ": " + neuralNetwork.neuronsOfEntranceLayer[i]);
+        }
+
+        System.out.println("Hidden layer");
+        for (int i = 0; i < neuralNetwork.numberOfHiddenLayerNeurons; i++) {
+            System.out.println(i + ": " + neuralNetwork.neuronsOfHiddenLayer[i]);
+        }
+
+        System.out.println("Exit layer");
+        for (int i = 0; i < neuralNetwork.numberOfExitNeurons; i++) {
+            System.out.println(i + ": " + neuralNetwork.neuronsOfExitLayer[i]);
+        }
     }
 }

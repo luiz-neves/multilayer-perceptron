@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Random;
 
 public class NeuralNetwork {
@@ -57,5 +58,40 @@ public class NeuralNetwork {
 
     public void updateBiasInHiddenLayer(Double bias, Integer neuronOfExitLayer) {
         hiddenNeuronsWeight[numberOfHiddenLayerNeurons + 1][neuronOfExitLayer] = bias;
+    }
+
+    public void feedforward(List<Double> inputs) {
+        // Input data in entrance layer
+        for (int i = 0; i < inputs.size(); i++) {
+            neuronsOfEntranceLayer[i] = inputs.get(i);
+        }
+
+        // For each hidden neuron
+        for (int hiddenNeuron = 0; hiddenNeuron < numberOfHiddenLayerNeurons; hiddenNeuron++) {
+            // Calculate the weighted input, adding bias too
+            double weightedInput = 0.0;
+            for (int entranceNeuron = 0; entranceNeuron <= numberOfEntranceNeurons; entranceNeuron++) {
+                weightedInput += neuronsOfEntranceLayer[entranceNeuron] * entranceNeuronsWeight[entranceNeuron][hiddenNeuron];
+            }
+
+            // Apply activation function
+            neuronsOfHiddenLayer[hiddenNeuron] = function(weightedInput) * (1 - function(weightedInput));
+        }
+
+        // For each neuron of exit layer
+        for (int exitNeuron = 0; exitNeuron < numberOfExitNeurons; exitNeuron++) {
+            // Calculate the weighted input, adding bias too
+            double weightedInput = 0.0;
+            for (int hiddenNeuron = 0; hiddenNeuron <= numberOfHiddenLayerNeurons; hiddenNeuron++) {
+                weightedInput += neuronsOfHiddenLayer[hiddenNeuron] * hiddenNeuronsWeight[hiddenNeuron][exitNeuron];
+            }
+
+            // Apply activation function
+            neuronsOfExitLayer[exitNeuron] = function(weightedInput) * (1 - function(weightedInput));
+        }
+    }
+
+    private double function(Double x) {
+        return 1 / (1 + Math.exp(-x));
     }
 }
